@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Recruiter Upskilling Framework</title>
+<style>
+:root{
+  --ink:#0E172E; --brand:#0A66C2; --brand-dark:#004182; --brand-lite:#70B5F9;
+  --brand-pale:#D2E9FF; --accent:#FD5F2F;
+  --n-100:#F2F2F2; --n-200:#EAEAEA; --n-300:#D8D8D8; --n-500:#666666; --white:#FFFFFF;
+  --bg:var(--white); --fg:var(--ink); --muted:var(--n-500); --line:var(--n-200); --panel:var(--n-100);
+  --maxw:1120px; --r:14px;
+  --f:"Community Pro","Century Gothic",Arial,Helvetica,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0B1220; --fg:#EAF1FB; --muted:#A8B6CC; --line:#22314B; --panel:#111C30; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f);font-size:17px;line-height:1.6;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:24px}
+h1,h2,h3,h4{line-height:1.2;margin:0;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 1em}
+p:last-child{margin-bottom:0}
+a{color:var(--brand)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:6px}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:0;z-index:50;background:var(--bg);border-block-end:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:20px;min-height:62px;flex-wrap:wrap}
+.skip{position:absolute;inset-inline-start:-9999px;top:0;background:var(--brand);color:#fff;padding:10px 16px;
+ border-radius:0 0 8px 0;font-weight:700;font-size:14px;text-decoration:none;z-index:100}
+.skip:focus{inset-inline-start:0}
+.mark{display:inline-flex;align-items:center;text-decoration:none;flex:0 0 auto}
+.mark .logo{block-size:30px;inline-size:auto;max-inline-size:292px;display:block}
+@media (prefers-color-scheme: dark){ .mark .logo{filter:brightness(0) invert(1)} }
+nav.main{margin-inline-start:auto}
+nav.main ul{display:flex;gap:6px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav.main a{display:inline-block;padding:7px 11px;border-radius:999px;font-size:14px;color:var(--muted);
+ text-decoration:none;font-weight:600;white-space:nowrap}
+nav.main a:hover{color:var(--brand);background:var(--brand-pale)}
+@media (prefers-color-scheme: dark){ nav.main a:hover{background:#152647} }
+
+/* ---------- hero ---------- */
+.hero{background:var(--ink);color:#fff;padding-block:68px 64px}
+.hero .eyebrow{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(210,233,255,.14);
+ color:var(--brand-lite);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-block-end:22px}
+.hero h1{font-size:clamp(2rem,5vw,3.1rem);max-inline-size:16ch}
+.hero .lede{font-size:clamp(1.05rem,2vw,1.24rem);color:#C6D4E8;max-inline-size:56ch;margin-block-start:20px;line-height:1.55}
+.nodes{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-block-start:38px}
+.node{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);
+ padding:18px 16px;text-decoration:none;color:#fff;display:block}
+.node:hover{background:rgba(112,181,249,.16);border-color:var(--brand-lite)}
+.node .n{inline-size:30px;block-size:30px;border-radius:8px;background:var(--brand);color:#fff;display:grid;
+ place-items:center;font-weight:700;font-size:14px;margin-block-end:11px}
+.node .t{font-size:14px;font-weight:600;line-height:1.35}
+.cta{display:inline-flex;align-items:center;gap:9px;margin-block-start:34px;padding:13px 24px;border-radius:999px;
+ background:var(--brand);color:#fff;text-decoration:none;font-weight:700;font-size:15px}
+.cta:hover{background:var(--brand-lite);color:var(--ink)}
+.cta svg{inline-size:16px;block-size:16px}
+
+/* ---------- sections ---------- */
+section{padding-block:64px;border-block-end:1px solid var(--line)}
+.shead{max-inline-size:66ch;margin-block-end:34px}
+.kicker{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--brand-pale);color:var(--brand-dark);
+ font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-block-end:14px}
+@media (prefers-color-scheme: dark){ .kicker,.tr .ti,.srcbox .si{background:#152647;color:var(--brand-lite)} }
+.shead h2{font-size:clamp(1.5rem,3.4vw,2.1rem)}
+.kicker .ki{inline-size:13px;block-size:13px;vertical-align:-2px;margin-inline-end:6px}
+.tr .th{display:flex;align-items:flex-start;gap:11px;margin-block-end:10px}
+.tr .th h3{margin:0}
+.tr .ti{flex:0 0 auto;inline-size:30px;block-size:30px;border-radius:9px;background:var(--brand-pale);
+ color:var(--brand-dark);display:grid;place-items:center}
+.tr .ti svg{inline-size:17px;block-size:17px}
+.quote .qm{inline-size:30px;block-size:30px;color:var(--brand-lite);margin-block-end:12px;display:block}
+.matters strong .mi,.tie strong .mi{inline-size:12px;block-size:12px;vertical-align:-1px;margin-inline-end:5px}
+.srcbox .si{inline-size:34px;block-size:34px;border-radius:10px;background:var(--brand-pale);color:var(--brand-dark);
+ display:grid;place-items:center;margin-block-end:14px}
+.srcbox .si svg{inline-size:19px;block-size:19px}
+.sub .ci{inline-size:13px;block-size:13px;vertical-align:-2px;margin-inline-end:6px}
+.shead p{color:var(--muted);margin-block-start:12px}
+.note{font-size:14px;color:var(--muted);border-inline-start:3px solid var(--brand-lite);padding-inline-start:14px;
+ margin-block-start:16px}
+
+/* ---------- skill cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column}
+.card .hd{display:flex;align-items:center;gap:12px;margin-block-end:14px}
+.card .n{inline-size:38px;block-size:38px;border-radius:10px;background:var(--brand-pale);color:var(--brand-dark);
+ display:grid;place-items:center;font-weight:700;font-size:16px;flex:0 0 auto}
+@media (prefers-color-scheme: dark){ .card .n{background:#152647;color:var(--brand-lite)} }
+.card .ic{margin-inline-start:auto;color:var(--brand)}
+.card .ic svg{inline-size:24px;block-size:24px}
+.card h3{font-size:1.06rem;margin-block-end:12px}
+.lab{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+ display:block;margin-block-end:5px}
+.card .why{font-size:14.5px;color:var(--muted);margin-block-end:14px}
+.card .imp{font-size:14.5px;padding:13px 15px;background:var(--panel);border-radius:10px}
+.card .go{margin-block-start:auto;padding-block-start:16px;font-size:14px;font-weight:700;text-decoration:none;
+ display:inline-flex;align-items:center;gap:6px}
+.card .go:hover{text-decoration:underline}
+
+/* ---------- trends ---------- */
+.trends{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tr{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;display:flex;flex-direction:column}
+.stat{font-size:clamp(3.6rem,6vw,4.6rem);font-weight:800;color:var(--brand);line-height:.92;
+ letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat-sub{font-size:14.5px;color:var(--muted);margin-block:12px 18px;max-inline-size:34ch}
+.tr h3{font-size:1.02rem;margin-block-end:10px}
+.tr p{font-size:14.5px;color:var(--muted)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-block:14px 0}
+.pill{font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--brand-pale);color:var(--brand-dark)}
+@media (prefers-color-scheme: dark){ .pill{background:#152647;color:var(--brand-lite)} }
+.matters{font-size:14px;background:var(--panel);border-radius:10px;padding:13px 15px;margin-block-start:14px}
+.matters strong{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+ margin-block-end:5px;font-weight:700}
+.src{font-size:12px;color:var(--muted);margin-block-start:auto;padding-block-start:16px}
+.quote{grid-column:span 2;background:var(--ink);color:#fff;border:0}
+.quote blockquote{margin:0;font-size:1.15rem;line-height:1.5;color:#EAF1FB}
+.quote cite{display:block;font-style:normal;font-size:14px;color:#fff;margin-block-start:18px;font-weight:700}
+.quote cite .role{display:block;font-weight:500;font-size:13px;color:var(--brand-lite);margin-block-start:3px}
+.quote .pill{background:rgba(210,233,255,.16);color:var(--brand-lite)}
+.quote .src{color:#8FA3BF}
+
+/* ---------- course library ---------- */
+details.sk{border:1px solid var(--line);border-radius:var(--r);margin-block-end:12px;background:var(--bg);overflow:hidden}
+details.sk[open]{border-color:var(--brand-lite)}
+summary.sk{display:flex;align-items:center;gap:14px;padding:20px 24px;cursor:pointer;list-style:none;font-weight:700}
+summary.sk::-webkit-details-marker{display:none}
+summary.sk .n{inline-size:34px;block-size:34px;border-radius:9px;background:var(--brand-pale);color:var(--brand-dark);
+ display:grid;place-items:center;font-size:15px;flex:0 0 auto}
+@media (prefers-color-scheme: dark){ summary.sk .n{background:#152647;color:var(--brand-lite)} }
+summary.sk .st{flex:1;font-size:1.03rem}
+summary.sk .chev{color:var(--muted);flex:0 0 auto}
+summary.sk .chev svg{inline-size:18px;block-size:18px;display:block}
+@media (prefers-reduced-motion: no-preference){ summary.sk .chev{transition:transform .18s ease} }
+details.sk[open] summary.sk .chev{transform:rotate(180deg)}
+.body{padding:0 24px 26px;border-block-start:1px solid var(--line);margin-block-start:2px;padding-block-start:22px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-block-end:24px}
+.blk{background:var(--panel);border-radius:10px;padding:16px 18px;font-size:14.5px}
+.sub{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-block-end:12px}
+ul.courses{list-style:none;margin:0 0 24px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+ul.courses li{border:1px solid var(--line);border-radius:10px}
+ul.courses a{display:flex;align-items:flex-start;gap:9px;padding:13px 15px;font-size:14.5px;font-weight:600;
+ text-decoration:underline;text-underline-offset:2px;color:var(--brand)}
+ul.courses a:hover{background:var(--brand-pale);color:var(--brand-dark)}
+@media (prefers-color-scheme: dark){ ul.courses a:hover{background:#152647;color:var(--brand-lite)} }
+ul.courses a .ex{flex:0 0 auto;margin-block-start:3px}
+ul.courses a .ex svg{inline-size:13px;block-size:13px;display:block}
+.cert{border:1px solid var(--brand-lite);border-radius:10px;padding:16px 18px;margin-block-end:20px;background:var(--bg)}
+.cert p{font-size:14.5px;color:var(--muted);margin-block-end:12px}
+.cert ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.cert a{font-size:14.5px;font-weight:700;text-decoration:underline;text-underline-offset:2px;
+ display:inline-flex;align-items:flex-start;gap:8px}
+.cert a .ex svg{inline-size:13px;block-size:13px;display:block;margin-block-start:4px}
+.tie{font-size:14px;background:var(--panel);border-radius:10px;padding:14px 16px;margin-block-end:20px}
+.tie strong{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+ margin-block-end:5px;font-weight:700}
+.back{font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.back:hover{text-decoration:underline}
+
+/* ---------- sources ---------- */
+.srcs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.srcbox{border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.srcbox h3{font-size:1rem;margin-block:8px 8px}
+.srcbox p{font-size:14px;color:var(--muted)}
+footer{padding-block:34px;font-size:13px;color:var(--muted)}
+
+/* ---------- responsive ---------- */
+@media (max-width:960px){
+  .cards,.trends{grid-template-columns:1fr 1fr}
+  .quote{grid-column:span 2}
+  .nodes{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:700px){
+  body{font-size:16px}
+  .wrap{padding-inline:18px}
+  .hero{padding-block:36px 40px}
+  section{padding-block:40px}
+  .shead{margin-block-end:24px}
+  .cards,.trends,.two,ul.courses,.srcs{grid-template-columns:1fr}
+  .cards,.trends{gap:14px}
+  .quote{grid-column:span 1}
+  .quote blockquote{font-size:1.02rem}
+  .nodes{grid-template-columns:1fr;gap:10px;margin-block-start:28px}
+  .node{display:flex;align-items:center;gap:12px;padding:14px 16px}
+  .node .n{margin-block-end:0;flex:0 0 auto}
+  .node .t{font-size:14.5px}
+  .cta{margin-block-start:26px;inline-size:100%;justify-content:center;padding-block:15px}
+  .card,.tr,.srcbox{padding:20px}
+  .stat{font-size:3.2rem}
+  nav.main{margin-inline-start:0;inline-size:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;
+   scrollbar-width:none;padding-block:2px 8px}
+  nav.main::-webkit-scrollbar{display:none}
+  nav.main ul{flex-wrap:nowrap}
+  .top-in{padding-block:10px;gap:4px}
+  .mark .logo{block-size:24px}
+  summary.sk{padding:15px 16px;gap:11px}
+  summary.sk .st{font-size:.97rem}
+  summary.sk .n{inline-size:30px;block-size:30px;font-size:14px}
+  .body{padding:20px 16px 22px}
+  .two{gap:12px;margin-block-end:20px}
+  ul.courses a{padding:14px 15px}
+  footer{padding-block:26px}
+}
+@media (max-width:420px){
+  h1{overflow-wrap:break-word}
+  .hero h1{font-size:1.72rem}
+  .shead h2{font-size:1.32rem}
+  .card h3,.tr h3{font-size:1rem}
+  .stat{font-size:3rem}
+}
+/* comfortable tap targets on touch devices */
+@media (hover:none){
+  nav.main a{padding:10px 13px}
+  ul.courses a{padding-block:15px}
+  .card .go,.back{padding-block:8px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+@media print{
+  :root{--bg:#fff;--fg:#000;--muted:#333;--line:#bbb;--panel:#f4f4f4}
+  .top,.cta,.node:hover{display:revert}
+  .top{position:static;display:block!important;border-block-end:1px solid #bbb;padding-block-end:8pt}
+  .top-in{min-height:0}
+  nav.main,.cta,.skip{display:none!important}
+  .mark .logo{block-size:26px}
+  body{font-size:11pt}
+  .hero{background:#fff;color:#000;padding-block:0 18pt;border-block-end:1px solid #bbb}
+  .hero .lede{color:#333}
+  .hero .eyebrow{background:#eee;color:#000}
+  .nodes{display:none}
+  details.sk{border-color:#bbb}
+  details.sk .body{display:block!important}
+  summary.sk .chev{display:none}
+  .quote{background:#fff;color:#000;border:1px solid #bbb}
+  .quote blockquote{color:#000}
+  .quote cite,.quote .src{color:#333}
+  .stat{color:#000}
+  a{color:#000;text-decoration:underline}
+  section,.card,.tr,details.sk,.srcbox{break-inside:avoid;page-break-inside:avoid}
+}
+
+.cards + .sub{margin-block-start:28px}
+/* vertical section navigation */
+.shell{max-inline-size:var(--maxw);margin-inline:auto;padding-inline:24px;display:grid;
+ grid-template-columns:238px minmax(0,1fr);gap:46px;align-items:start}
+.side{position:sticky;top:84px;padding-block:64px 0}
+.side .sidettl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+ color:var(--muted);margin-block-end:12px;padding-inline-start:16px}
+.side ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;
+ border-inline-start:2px solid var(--line)}
+.side a{display:block;padding:10px 16px;font-size:14px;font-weight:600;color:var(--muted);
+ text-decoration:none;border-radius:0 8px 8px 0;margin-inline-start:-2px;
+ border-inline-start:2px solid transparent}
+.side a:hover{color:var(--brand);background:var(--brand-pale);border-inline-start-color:var(--brand-lite)}
+.side a[aria-current="true"]{color:var(--brand-dark);background:var(--brand-pale);
+ border-inline-start-color:var(--brand)}
+@media (prefers-color-scheme: dark){
+  .side a:hover,.side a[aria-current="true"]{background:#152647;color:var(--brand-lite)}
+}
+.content .wrap{max-inline-size:none;padding-inline:0}
+.content section:last-child{border-block-end:0}
+@media (max-width:900px){
+  /* stack the rail vertically and let it scroll away with the page */
+  .shell{grid-template-columns:1fr;gap:0;padding-inline:18px}
+  .side{position:static;top:auto;padding-block:30px 0}
+  .side .sidettl{display:block;padding-inline-start:14px}
+  .side ul{flex-direction:column;overflow:visible;gap:2px;
+   border-inline-start:2px solid var(--line)}
+  .side a{display:flex;align-items:center;white-space:normal;min-block-size:46px;
+   padding:11px 16px;border-radius:0 8px 8px 0;margin-inline-start:-2px;
+   border-inline-start:2px solid transparent}
+}
+/* anchor jumps clear the sticky header */
+section[id],details.sk[id]{scroll-margin-block-start:96px}
+@media (max-width:900px){ section[id],details.sk[id]{scroll-margin-block-start:70px} }
+/* nothing may push the page sideways on a narrow screen */
+img,svg{max-inline-size:100%}
+.courses a,.cert a,.card h3,.tr h3,summary.sk .st{overflow-wrap:anywhere}
+@media print{ .side{display:none!important} .shell{display:block;padding-inline:0} }
+
+/* persistent return-to-top control, available across every section */
+.totop{position:fixed;inset-block-end:20px;inset-inline-end:20px;z-index:60;
+ display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;
+ background:var(--brand);color:#fff;text-decoration:none;font-size:14px;font-weight:700;
+ box-shadow:0 4px 14px rgba(14,23,46,.24);border:1px solid rgba(255,255,255,.18);
+ opacity:0;visibility:hidden;transform:translateY(8px)}
+.totop.show{opacity:1;visibility:visible;transform:translateY(0)}
+.totop:hover{background:var(--brand-dark)}
+.totop svg{inline-size:15px;block-size:15px;flex:0 0 auto}
+@media (prefers-reduced-motion: no-preference){
+  .totop{transition:opacity .18s ease,transform .18s ease,background .18s ease}
+}
+@media (max-width:700px){
+  .totop{inset-block-end:16px;inset-inline-end:16px;padding:12px 16px;min-block-size:46px}
+}
+@media print{ .totop{display:none!important} }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#top">Skip to content</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="mark" href="#top" aria-label="LinkedIn Learning Career Hub">
+      <img class="logo" src="data:image/png;base64,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" alt="LinkedIn Learning Career Hub" width="1469" height="151">
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Recruiter Upskilling Framework</h1>
+    <p class="lede">A practical roadmap to strengthen recruiter readiness and hiring outcomes.It covers five critical capabilities for modern talent acquisition teams with a direct link to business impact and suggestions around curated learning and professional certificates</p>
+
+    <div class="nodes">
+      <a class="node" href="#skill-1"><span class="n" aria-hidden="true">1</span><span class="t">Responsible AI and recruiting technology fluency</span></a>
+      <a class="node" href="#skill-2"><span class="n" aria-hidden="true">2</span><span class="t">Talent intelligence, analytics and workforce planning</span></a>
+      <a class="node" href="#skill-3"><span class="n" aria-hidden="true">3</span><span class="t">Skills-based hiring and structured assessment</span></a>
+      <a class="node" href="#skill-4"><span class="n" aria-hidden="true">4</span><span class="t">Strategic talent advisory and stakeholder influence</span></a>
+      <a class="node" href="#skill-5"><span class="n" aria-hidden="true">5</span><span class="t">Human-centred candidate engagement and relationship building</span></a>
+    </div>
+
+    <a class="cta" href="#skills">Explore the five skills
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </a>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="side" aria-label="Sections">
+    <p class="sidettl">On this page</p>
+    <ul>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#trends">Recruiting trends</a></li>
+      <li><a href="#skills">Five critical skills</a></li>
+      <li><a href="#library">Course library</a></li>
+      <li><a href="#faq">FAQs</a></li>
+    </ul>
+  </nav>
+  <div class="content">
+
+<section id="start">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker"><svg class="ki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>Start here</span>
+      <h2>Getting started</h2>
+      <p>Recruiting has changed more in the past ten years than in the previous forty. The best recruiters become trusted advisors. Here is where that starts.</p>
+    </div>
+      <p class="sub">Your first moves</p>
+      <div class="cards">
+      <article class="card">
+        <div class="hd"><span class="n" aria-hidden="true">1</span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.4"/><path d="M5 20c0-3.4 3.1-6 7-6s7 2.6 7 6"/></svg></span></div>
+        <h3>Sharpen your profile</h3>
+        <p class="why">Strong opening, rich media, certifications.</p>
+      </article>
+      <article class="card">
+        <div class="hd"><span class="n" aria-hidden="true">2</span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 13h8M8 16.5h5"/></svg></span></div>
+        <h3>Amp up your Company Page</h3>
+        <p class="why">Video, followers, targeted updates.</p>
+      </article>
+      <article class="card">
+        <div class="hd"><span class="n" aria-hidden="true">3</span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></span></div>
+        <h3>Learn your talent pools</h3>
+        <p class="why">Search live before you commit to a plan.</p>
+      </article>
+      <article class="card">
+        <div class="hd"><span class="n" aria-hidden="true">4</span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg></span></div>
+        <h3>Measure your work</h3>
+        <p class="why">Quality, source, time and cost of hire.</p>
+      </article>
+      </div>
+      <p class="sub">Start with your brand</p>
+      <p>Candidates judge the person before they judge the role. A strong profile earns trust before you speak, helps the right people self-select, and opens warmer conversations.</p>
+      <div class="two">
+        <div class="blk"><p class="sub">1. Craft a killer opening</p>Over-invest in your headline and summary. Write like you want to hire.</div>
+        <div class="blk"><p class="sub">2. Add rich media</p>Show your work with images, video and presentations.</div>
+        <div class="blk"><p class="sub">3. Add certifications</p>Credentials build credibility fast.</div>
+        <div class="blk"><p class="sub">4. Show volunteer work</p>Paint a fuller picture of who you are.</div>
+        <div class="blk"><p class="sub">5. Make updates interactive</p>Mention people and companies. Reply when they comment.</div>
+      </div>
+      <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/></svg>Build the skill</p>
+      <ul class="courses">
+        <li><a href="https://www.linkedin.com/learning/rock-your-linkedin-profile-28032639" target="_blank" rel="noopener noreferrer">Rock Your LinkedIn Profile<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+        <li><a href="https://www.linkedin.com/learning/a-first-look-at-the-linkedin-hiring-assistant-in-recruiter" target="_blank" rel="noopener noreferrer">A First Look at the LinkedIn Hiring Assistant in Recruiter *<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+      </ul>
+      <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7"/></svg>* Licence required</strong>A First Look at the LinkedIn Hiring Assistant in Recruiter applies only to clients whose recruiters hold a LinkedIn Hiring Assistant licence.</div>
+      <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>Source</strong>LinkedIn Essentials, The Modern Recruiter&rsquo;s Guide.</div>
+  </div>
+</section>
+
+<section id="trends">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker"><svg class="ki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg>Market context</span>
+      <h2>What the market is telling us</h2>
+          </div>
+
+    <div class="trends">
+
+      <article class="tr">
+        <p class="stat">73%</p>
+        <p class="stat-sub">of talent acquisition pros agree that AI will change the way organizations hire.</p>
+        <div class="th"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9.5 9.5h5v5h-5zM12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span><h3>AI in Recruiting</h3></div>
+        <p>AI deployment is accelerating, but challenges loom. AI is helping automate tasks while enabling recruiters to focus on strategic activities, and as adoption grows, challenges like data privacy and budget remain.</p>
+        <div class="pills"><span class="pill">Skill 1</span><span class="pill">Skill 5</span></div>
+        <div class="matters"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 1 3.5 10.9V16h-7v-2.1A6 6 0 0 1 12 3z"/></svg>Why this matters for upskilling</strong>To stay ahead, TA professionals must develop both AI and human-centered skills to excel in evolving, advisor-like roles.</div>
+        <p class="src">Source: 2025 Future of Recruiting report</p>
+      </article>
+
+      <article class="tr">
+        <p class="stat">61%</p>
+        <p class="stat-sub">of TA pros believe AI can improve how they measure quality of hire.</p>
+        <div class="th"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4 6.7 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><h3>Quality of Hire</h3></div>
+        <p>Organizations are getting serious about hiring the best possible candidates, and measuring the results. Though measuring quality of hire is challenging, AI can help provide predictive insights.</p>
+        <div class="pills"><span class="pill">Skill 2</span><span class="pill">Skill 5</span></div>
+        <div class="matters"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 1 3.5 10.9V16h-7v-2.1A6 6 0 0 1 12 3z"/></svg>Why this matters for upskilling</strong>By focusing on long-term value over speed, leveraging AI tools, and strengthening employer brand, TA teams can attract and retain adaptable, high-performing talent.</div>
+        <p class="src">Source: 2025 Future of Recruiting report</p>
+      </article>
+
+      <article class="tr">
+        <p class="stat">93%</p>
+        <p class="stat-sub">of TA pros believe accurately assessing a candidate&rsquo;s skills is crucial for improving quality of hire.</p>
+        <div class="th"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><h3>Skills-Based Hiring</h3></div>
+        <p>As employers strive to fill skills gaps, skills-based hiring is gaining steam. By prioritizing skills over degrees or job history, organizations unlock untapped talent, improve role alignment, and drive quality hires.</p>
+        <div class="pills"><span class="pill">Skill 3</span></div>
+        <div class="matters"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 1 3.5 10.9V16h-7v-2.1A6 6 0 0 1 12 3z"/></svg>Why this matters for upskilling</strong>Using AI tools and insights, TA teams can implement a skills-first approach that ensures better long-term success.</div>
+        <p class="src">Source: 2025 Future of Recruiting report</p>
+      </article>
+
+      <article class="tr quote">
+        <svg class="qm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.4 5.5C6.3 7 4.5 9.7 4.5 13.1c0 3.2 1.9 5.4 4.5 5.4 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.4-1.7 1.8-3.3 3.6-4.2zm9.6 0c-3.1 1.5-4.9 4.2-4.9 7.6 0 3.2 1.9 5.4 4.5 5.4 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.4-1.7 1.8-3.3 3.6-4.2z"/></svg>
+        <blockquote>&ldquo;AI is a tool to augment human judgment, not replace it. Successful organizations will find the right balance: using AI to handle routine tasks and consider complex problems, while preserving meaningful human interaction where it matters most.&rdquo;
+          <cite>Glen Cathey<span class="role">SVP, Consulting Principal, Talent Advisory and Digital Strategy at Randstad</span></cite>
+        </blockquote>
+        <p class="src">Source: 2025 Future of Recruiting report</p>
+      </article>
+
+      <article class="tr">
+        <div class="th"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 4.4-3 8.3-7 10-4-1.7-7-5.6-7-10V6z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg></span><h3>Transform challenges into strategic opportunities</h3></div>
+        <p>Adapting to AI may seem daunting, but by mastering AI tools, recruiters can evolve into strategic talent advisors ready to navigate change and shape the workforce of the future.</p>
+        <div class="pills"><span class="pill">Skill 4</span></div>
+        <div class="matters"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 1 3.5 10.9V16h-7v-2.1A6 6 0 0 1 12 3z"/></svg>Why this matters for upskilling</strong>Advisory capability is what recruiters grow into as AI absorbs transactional work.</div>
+        <p class="src">Source: 2025 Future of Recruiting report</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker"><svg class="ki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>The Recruiter Upskilling Framework</span>
+      <h2>Five critical skills</h2>
+      <p>Five capabilities that define the modern recruiter, presented as a set with no ranking between them.</p>
+    </div>
+      <p>Each skill explains why it matters in the current hiring market, the business impact of building it, and the LinkedIn Learning courses that develop it. Agree a starting point with your team, then work through that skill&rsquo;s courses, or select individual courses to close a specific gap.</p>
+
+    <div class="cards">
+
+      <article class="card">
+        <div class="hd">
+          <span class="n" aria-hidden="true">1</span>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 9h6v6H9zM12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
+        </div>
+        <h3>Responsible AI and recruiting technology fluency</h3>
+        <p class="why"><span class="lab">Why it is critical now</span>AI is rapidly absorbing drafting, search, matching and workflow tasks. Recruiters must know where AI accelerates work, where human judgment is essential, and how to manage bias, privacy, transparency and data-quality risks.</p>
+        <p class="imp"><span class="lab">Business impact</span>Shorter cycle time and higher recruiter capacity without sacrificing fairness or candidate trust.</p>
+        <a class="go" href="#skill-1">View courses <span aria-hidden="true">&rarr;</span></a>
+      </article>
+
+      <article class="card">
+        <div class="hd">
+          <span class="n" aria-hidden="true">2</span>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg></span>
+        </div>
+        <h3>Talent intelligence, analytics and workforce planning</h3>
+        <p class="why"><span class="lab">Why it is critical now</span>Scarce skills and shifting role requirements make reactive requisition filling insufficient. Recruiters need to translate labour-market, funnel and internal-skills data into forward-looking supply, demand and risk insights.</p>
+        <p class="imp"><span class="lab">Business impact</span>Better workforce decisions, earlier risk detection and improved time-to-fill and quality of hire.</p>
+        <a class="go" href="#skill-2">View courses <span aria-hidden="true">&rarr;</span></a>
+      </article>
+
+      <article class="card">
+        <div class="hd">
+          <span class="n" aria-hidden="true">3</span>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/><circle cx="18" cy="18" r="3"/></svg></span>
+        </div>
+        <h3>Skills-based hiring and structured assessment</h3>
+        <p class="why"><span class="lab">Why it is critical now</span>Credential proxies are weakening as jobs change faster than traditional qualifications. Recruiters must define success profiles, identify transferable skills and use structured, job-relevant evidence to assess capability consistently.</p>
+        <p class="imp"><span class="lab">Business impact</span>Wider and more diverse talent pools, better role fit and defensible hiring decisions.</p>
+        <a class="go" href="#skill-3">View courses <span aria-hidden="true">&rarr;</span></a>
+      </article>
+
+      <article class="card">
+        <div class="hd">
+          <span class="n" aria-hidden="true">4</span>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></span>
+        </div>
+        <h3>Strategic talent advisory and stakeholder influence</h3>
+        <p class="why"><span class="lab">Why it is critical now</span>As automation handles transactions, recruiter value shifts to judgment: challenging unclear demand, translating market realities and guiding leaders toward executable talent decisions.</p>
+        <p class="imp"><span class="lab">Business impact</span>Faster alignment, realistic hiring plans and fewer stalled searches.</p>
+        <a class="go" href="#skill-4">View courses <span aria-hidden="true">&rarr;</span></a>
+      </article>
+
+      <article class="card">
+        <div class="hd">
+          <span class="n" aria-hidden="true">5</span>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M17 8.5a3 3 0 0 1 0 5"/></svg></span>
+        </div>
+        <h3>Human-centred candidate engagement and relationship building</h3>
+        <p class="why"><span class="lab">Why it is critical now</span>AI-generated outreach raises the value of authentic, differentiated human interaction. Recruiters must create trust, coach candidates through complex choices and sustain communities rather than rely on transactional messaging.</p>
+        <p class="imp"><span class="lab">Business impact</span>Higher response, conversion and acceptance; fewer drop-offs and stronger employer reputation.</p>
+        <a class="go" href="#skill-5">View courses <span aria-hidden="true">&rarr;</span></a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="library">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker"><svg class="ki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg>Course library</span>
+      <h2>Courses and certificates by skill</h2>
+      <p>Expand any skill for its recommended LinkedIn Learning courses and certificates.</p>
+    </div>
+
+    <details class="sk" id="skill-1">
+      <summary class="sk"><span class="n" aria-hidden="true">1</span><span class="st">Responsible AI and recruiting technology fluency</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <div class="two">
+          <div class="blk"><p class="sub">Why it is critical now</p>AI is rapidly absorbing drafting, search, matching and workflow tasks. Recruiters must know where AI accelerates work, where human judgment is essential, and how to manage bias, privacy, transparency and data-quality risks.</div>
+          <div class="blk"><p class="sub">Business impact</p>Shorter cycle time and higher recruiter capacity without sacrificing fairness or candidate trust; more consistent adoption of approved tools and fewer governance failures.</div>
+        </div>
+        <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/></svg>Recommended courses</p>
+        <ul class="courses">
+          <li><a href="https://www.linkedin.com/learning/generative-ai-recruiting-and-talent-acquisition" target="_blank" rel="noopener noreferrer">Generative AI, Recruiting, and Talent Acquisition<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/a-first-look-at-the-linkedin-hiring-assistant-in-recruiter" target="_blank" rel="noopener noreferrer">A First Look at the LinkedIn Hiring Assistant in Recruiter *<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/harnessing-ai-in-the-recruiting-lifecycle" target="_blank" rel="noopener noreferrer">Harnessing AI in the Recruiting Lifecycle<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/ethical-ai-for-hiring-and-talent-acquisition-a-conversation-with-don-phin" target="_blank" rel="noopener noreferrer">Ethical AI for Hiring and Talent Acquisition: A Conversation with Don Phin<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/introduction-to-auditing-ai-systems" target="_blank" rel="noopener noreferrer">Introduction to Auditing AI Systems<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+        </ul>
+        <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7"/></svg>* Licence required</strong>A First Look at the LinkedIn Hiring Assistant in Recruiter applies only to clients whose recruiters hold a LinkedIn Hiring Assistant licence.</div>
+        <div class="cert">
+          <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.8L7 22l5-2.6L17 22l-1.5-8.2"/></svg>Professional certificate</p>
+          <p>The Generative AI for Recruiting certificate covers generative AI in HR, sourcing, and the ethics of AI-assisted hiring.</p>
+          <ul><li><a href="https://www.linkedin.com/learning/paths/generative-ai-for-recruiting-professional-certificate-by-linkedin-learning" target="_blank" rel="noopener noreferrer">Generative AI for Recruiting Professional Certificate by LinkedIn Learning<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li></ul>
+        </div>
+        <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg>Aligned market signal</strong>73% of talent acquisition pros agree that AI will change the way organizations hire. <em>Source: 2025 Future of Recruiting report</em></div>
+        <a class="back" href="#skills"><span aria-hidden="true">&larr;</span> Back to the five skills</a>
+      </div>
+    </details>
+
+    <details class="sk" id="skill-2">
+      <summary class="sk"><span class="n" aria-hidden="true">2</span><span class="st">Talent intelligence, analytics and workforce planning</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <div class="two">
+          <div class="blk"><p class="sub">Why it is critical now</p>Scarce skills and shifting role requirements make reactive requisition filling insufficient. Recruiters need to translate labour-market, funnel and internal-skills data into forward-looking supply, demand and risk insights.</div>
+          <div class="blk"><p class="sub">Business impact</p>Better workforce decisions, earlier risk detection, stronger pipelines and resource allocation; improved forecast accuracy, time-to-fill and quality of hire.</div>
+        </div>
+        <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/></svg>Recommended courses</p>
+        <ul class="courses">
+          <li><a href="https://www.linkedin.com/learning/data-driven-hr-ai-powered-people-analytics-for-workforce-planning-and-employee-experience" target="_blank" rel="noopener noreferrer">Data-Driven HR: AI-Powered People Analytics for Workforce Planning and Employee Experience<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/human-resources-strategic-workforce-planning-25818025" target="_blank" rel="noopener noreferrer">Human Resources: Strategic Workforce Planning<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/ai-and-data-driven-decision-making-for-hr" target="_blank" rel="noopener noreferrer">AI and Data-Driven Decision-Making for HR<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/using-data-science-to-hire-employees" target="_blank" rel="noopener noreferrer">Using Data Science to Hire Employees<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/people-analytics" target="_blank" rel="noopener noreferrer">People Analytics<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+        </ul>
+        <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg>Aligned market signal</strong>61% of TA pros believe AI can improve how they measure quality of hire. <em>Source: 2025 Future of Recruiting report</em></div>
+        <a class="back" href="#skills"><span aria-hidden="true">&larr;</span> Back to the five skills</a>
+      </div>
+    </details>
+
+    <details class="sk" id="skill-3">
+      <summary class="sk"><span class="n" aria-hidden="true">3</span><span class="st">Skills-based hiring and structured assessment</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <div class="two">
+          <div class="blk"><p class="sub">Why it is critical now</p>Credential proxies are weakening as jobs change faster than traditional qualifications. Recruiters must define success profiles, identify transferable skills and use structured, job-relevant evidence to assess capability consistently.</div>
+          <div class="blk"><p class="sub">Business impact</p>Wider and more diverse talent pools, better role fit, defensible decisions and stronger quality of hire with less bias and fewer false negatives.</div>
+        </div>
+        <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/></svg>Recommended courses</p>
+        <ul class="courses">
+          <li><a href="https://www.linkedin.com/learning/human-resources-job-structure-and-design" target="_blank" rel="noopener noreferrer">Human Resources: Job Structure and Design<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/skills-first-recruiting-with-a-dei-mindset" target="_blank" rel="noopener noreferrer">Skills-First Recruiting with a DEI Mindset<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/skills-first-interviewing" target="_blank" rel="noopener noreferrer">Skills-First Interviewing<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/working-with-prehire-assessments" target="_blank" rel="noopener noreferrer">Working with Prehire Assessments<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/skills-first-talent-acquisition" target="_blank" rel="noopener noreferrer">Skills-First Talent Acquisition<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+        </ul>
+        <div class="cert">
+          <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.8L7 22l5-2.6L17 22l-1.5-8.2"/></svg>Professional certificates</p>
+          <p>Two certificates anchor this skill. The American Staffing Association Corporate Recruiting certificate covers the end-to-end recruiting process and structured hiring practice, and DEI Awareness builds the inclusion literacy that keeps skills-based assessment fair and widens the pools it reaches.</p>
+          <ul>
+            <li><a href="https://www.linkedin.com/learning/paths/american-staffing-association-corporate-recruiting-professional-certificate" target="_blank" rel="noopener noreferrer">American Staffing Association Corporate Recruiting Professional Certificate<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+            <li><a href="https://www.linkedin.com/learning/paths/dei-awareness-professional-certificate-by-linkedin-learning" target="_blank" rel="noopener noreferrer">DEI Awareness Professional Certificate by LinkedIn Learning<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          </ul>
+        </div>
+        <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg>Aligned market signal</strong>93% of TA pros believe accurately assessing a candidate&rsquo;s skills is crucial for improving quality of hire. <em>Source: 2025 Future of Recruiting report</em></div>
+        <a class="back" href="#skills"><span aria-hidden="true">&larr;</span> Back to the five skills</a>
+      </div>
+    </details>
+
+    <details class="sk" id="skill-4">
+      <summary class="sk"><span class="n" aria-hidden="true">4</span><span class="st">Strategic talent advisory and stakeholder influence</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <div class="two">
+          <div class="blk"><p class="sub">Why it is critical now</p>As automation handles transactions, recruiter value shifts to judgment: challenging unclear demand, translating market realities and guiding leaders toward executable talent decisions.</div>
+          <div class="blk"><p class="sub">Business impact</p>Faster alignment, realistic hiring plans, better role design and fewer stalled searches; stronger hiring-manager accountability and business confidence in talent acquisition.</div>
+        </div>
+        <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/></svg>Recommended courses</p>
+        <ul class="courses">
+          <li><a href="https://www.linkedin.com/learning/developing-business-acumen-28039135" target="_blank" rel="noopener noreferrer">Developing Business Acumen<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/the-future-of-recruiting-becoming-a-talent-advisor" target="_blank" rel="noopener noreferrer">The Future of Recruiting: Becoming a Talent Advisor<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/facilitating-a-collaborative-strategic-planning-session" target="_blank" rel="noopener noreferrer">Facilitating a Collaborative Strategic Planning Session<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/human-resources-leadership-and-strategic-impact" target="_blank" rel="noopener noreferrer">Human Resources: Leadership and Strategic Impact<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+        </ul>
+        <div class="cert">
+          <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.8L7 22l5-2.6L17 22l-1.5-8.2"/></svg>Professional certificate</p>
+          <p>Change Management is the certificate that supports this skill most directly. Advisory work usually stalls at the point where a role has to be redesigned or a hiring process changed, and the certificate covers how to plan those changes and bring stakeholders with you.</p>
+          <ul><li><a href="https://www.linkedin.com/learning/paths/change-management-professional-certificate-by-linkedin-learning" target="_blank" rel="noopener noreferrer">Change Management Professional Certificate by LinkedIn Learning<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li></ul>
+        </div>
+        <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg>Aligned market signal</strong>By mastering AI tools, recruiters can evolve into strategic talent advisors ready to navigate change and shape the workforce of the future. <em>Source: 2025 Future of Recruiting report</em></div>
+        <a class="back" href="#skills"><span aria-hidden="true">&larr;</span> Back to the five skills</a>
+      </div>
+    </details>
+
+    <details class="sk" id="skill-5">
+      <summary class="sk"><span class="n" aria-hidden="true">5</span><span class="st">Human-centred candidate engagement and relationship building</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <div class="two">
+          <div class="blk"><p class="sub">Why it is critical now</p>AI-generated outreach raises the value of authentic, differentiated human interaction. Recruiters must create trust, coach candidates through complex choices and sustain communities rather than rely on transactional messaging.</div>
+          <div class="blk"><p class="sub">Business impact</p>Higher response, conversion and acceptance; fewer drop-offs and less ghosting; stronger employer reputation, silver-medallist pipelines and candidate advocacy.</div>
+        </div>
+        <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/></svg>Recommended courses</p>
+        <ul class="courses">
+          <li><a href="https://www.linkedin.com/learning/optimizing-your-candidate-outreach-strategy" target="_blank" rel="noopener noreferrer">Optimizing Your Candidate Outreach Strategy<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/creating-a-great-candidate-experience" target="_blank" rel="noopener noreferrer">Creating a Great Candidate Experience<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/hr-recruiting-communication-strategies-to-attract-and-retain-top-talent" target="_blank" rel="noopener noreferrer">HR Recruiting Communication Strategies to Attract and Retain Top Talent<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/inclusive-branding-the-secret-to-attracting-the-right-talent-for-your-organization" target="_blank" rel="noopener noreferrer">Inclusive Branding: The Secret to Attracting the Right Talent for Your Organization<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/employer-branding-to-attract-talent" target="_blank" rel="noopener noreferrer">Employer Branding to Attract Talent<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          <li><a href="https://www.linkedin.com/learning/rock-your-linkedin-profile-28032639" target="_blank" rel="noopener noreferrer">Rock Your LinkedIn Profile<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+        </ul>
+        <div class="cert">
+          <p class="sub"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.8L7 22l5-2.6L17 22l-1.5-8.2"/></svg>Professional certificates</p>
+          <p>Two certificates reinforce this skill. Essential Business Communication Skills develops the clarity, listening and conflict-resolution habits behind trusted candidate conversations, while the Negotiation certificate covers the offer and expectation-setting discussions that decide whether an accepted offer holds.</p>
+          <ul>
+            <li><a href="https://www.linkedin.com/learning/paths/essential-business-communication-skills-professional-certificate-by-linkedin-learning" target="_blank" rel="noopener noreferrer">Essential Business Communication Skills Professional Certificate by LinkedIn Learning<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+            <li><a href="https://www.linkedin.com/learning/paths/negotiation-professional-certificate-by-american-negotiation-institute" target="_blank" rel="noopener noreferrer">Negotiation Professional Certificate by American Negotiation Institute<span class="ex" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a></li>
+          </ul>
+        </div>
+        <div class="tie"><strong><svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg>Aligned market signal</strong>To stay ahead, TA professionals must develop both AI and human-centered skills to excel in evolving, advisor-like roles. <em>Source: 2025 Future of Recruiting report</em></div>
+        <a class="back" href="#skills"><span aria-hidden="true">&larr;</span> Back to the five skills</a>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker"><svg class="ki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6"/><path d="M12 17.2h.01"/></svg>Questions</span>
+      <h2>Frequently Asked Questions</h2>
+      <p>Expand any question for the answer.</p>
+    </div>
+
+    <details class="sk" id="faq-1">
+      <summary class="sk"><span class="n" aria-hidden="true">1</span><span class="st">What&rsquo;s in it for me?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>Your daily work gets easier, because these skills fix what slows you down now: roles that change after weeks of sourcing, shortlists rejected without a reason, candidates who go quiet, and decisions you cannot back with evidence. People start treating you as an advisor, not just a recruiter. And you earn certificates that go on your profile and stay with you for good.</p>
+      </div>
+    </details>
+
+    <details class="sk" id="faq-2">
+      <summary class="sk"><span class="n" aria-hidden="true">2</span><span class="st">I already use AI tools every day. Do I need to learn &ldquo;Responsible AI and recruiting technology fluency&rdquo;?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>Using AI tools is not the same as being fluent in them. The gap the framework identifies is knowing where AI accelerates work, where human judgment is essential, and how to manage bias, privacy, transparency and data-quality risks. Most daily use never teaches the third part.</p>
+      </div>
+    </details>
+
+    <details class="sk" id="faq-3">
+      <summary class="sk"><span class="n" aria-hidden="true">3</span><span class="st">Where do I honestly start?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>Where you are facing challenges during requisitions:</p>
+        <div class="two">
+          <div class="blk"><p class="sub">Searches dying at assessment</p>Start with skills-based hiring</div>
+          <div class="blk"><p class="sub">Hiring managers reopening settled decisions</p>Start with talent advisory</div>
+          <div class="blk"><p class="sub">Candidates going quiet after outreach</p>Start with candidate engagement</div>
+          <div class="blk"><p class="sub">Being asked to forecast rather than fill</p>Start with talent intelligence</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="sk" id="faq-4">
+      <summary class="sk"><span class="n" aria-hidden="true">4</span><span class="st">I&rsquo;m not a numbers person. Can I skip learning &ldquo;Talent intelligence, analytics and workforce planning&rdquo;?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>It asks you to interpret data instead of creating it. It turns market, funnel and internal-skills data into a view of supply, demand and risk. If you have ever told a hiring manager a role will be hard to fill, you have already done a version of this.</p>
+      </div>
+    </details>
+
+    <details class="sk" id="faq-5">
+      <summary class="sk"><span class="n" aria-hidden="true">5</span><span class="st">What does being a &lsquo;talent advisor&rsquo; actually change about my day?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>Mostly, it changes when you get involved. Today a role lands in your queue already decided, and your first move is to start sourcing. As an advisor, your first move is a conversation: what problem is this hire solving, which of these requirements are real, and does the market actually contain this person at this salary. Some of those roles get reshaped in that conversation. A few get withdrawn. The rest you start sourcing with a brief that holds.</p>
+        <p>The visible difference is what stops happening. Fewer weeks spent on a role that gets rewritten. Fewer shortlists rejected on criteria nobody mentioned at kickoff. Fewer searches quietly abandoned after two months. You are doing less work, on better-defined roles, with hiring managers who already agree what good looks like.</p>
+      </div>
+    </details>
+
+    <details class="sk" id="faq-6">
+      <summary class="sk"><span class="n" aria-hidden="true">6</span><span class="st">Will my manager sign off on the time?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>Lead with the impact instead of the course list. Each skill names what it moves: cycle time and capacity, workforce decisions and time-to-fill, pool width and role fit, alignment and stalled searches, response and acceptance rates. Pick the one matching the metric your team is currently missing.</p>
+      </div>
+    </details>
+
+    <details class="sk" id="faq-7">
+      <summary class="sk"><span class="n" aria-hidden="true">7</span><span class="st">If I only do one thing, what should it be?</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="body">
+        <p>Take one skill, one live requisition, and apply the learning to it this month. The framework is built to be used against real work, not completed as a course list.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker"><svg class="ki" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Sources</span>
+      <h2>Where this comes from</h2>
+    </div>
+    <div class="srcs">
+      <div class="srcbox">
+        <span class="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span>
+        <span class="lab">Framework content</span>
+        <h3>Recruiter Upskilling Framework</h3>
+        <p>LinkedIn Learning Career Hub. Source for the five critical skills, the business case for each, the recommended courses and the professional certificates.</p>
+      </div>
+      <div class="srcbox">
+        <span class="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h4v4"/></svg></span>
+        <span class="lab">Recruiting trends</span>
+        <h3>2025 Future of Recruiting report</h3>
+        <p>Source for every trend and statistic shown. Insights from billions of data points, a survey of 1,000+ talent pros, and advice from industry leaders.</p>
+      </div>
+      <div class="srcbox">
+        <span class="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg></span>
+        <span class="lab">Getting started and brand</span>
+        <h3>LinkedIn Essentials: The Modern Recruiter&rsquo;s Guide</h3>
+        <p>Source for the getting started and profile guidance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">LinkedIn Learning Career Hub. Recruiter Upskilling Framework.</div>
+</footer>
+
+<a class="totop" href="#top" aria-label="Move to top of page">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  <span>Move to top</span>
+</a>
+
+
+<script>
+(function(){
+  var nav = document.querySelector('.top');
+  var links = Array.prototype.slice.call(document.querySelectorAll('a[href^="#"]'));
+  links.forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href');
+      if(id === '#' || id.length < 2){ return; }
+      var el = document.querySelector(id);
+      if(!el){ return; }
+      var panel = el.closest ? el.closest('details.sk') : null;
+      if(el.tagName === 'DETAILS'){ el.open = true; }
+      else if(panel){ panel.open = true; }
+    });
+  });
+  window.addEventListener('beforeprint', function(){
+    Array.prototype.forEach.call(document.querySelectorAll('details.sk'), function(d){
+      d.dataset.wasOpen = d.open ? '1' : '0';
+      d.open = true;
+    });
+  });
+  window.addEventListener('afterprint', function(){
+    Array.prototype.forEach.call(document.querySelectorAll('details.sk'), function(d){
+      if(d.dataset.wasOpen === '0'){ d.open = false; }
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.side a[href^="#"]'));
+  if(!links.length || !('IntersectionObserver' in window)){ return; }
+  var map = {}, targets = [], seen = {};
+  links.forEach(function(a){
+    var el = document.querySelector(a.getAttribute('href'));
+    if(el){ map[el.id] = a; targets.push(el); }
+  });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ seen[e.target.id] = e.isIntersecting; });
+    for(var i = 0; i < targets.length; i++){
+      var id = targets[i].id;
+      if(seen[id]){
+        links.forEach(function(a){ a.removeAttribute('aria-current'); });
+        map[id].setAttribute('aria-current','true');
+        return;
+      }
+    }
+  }, { rootMargin: '-84px 0px -55% 0px', threshold: 0 });
+  targets.forEach(function(t){ io.observe(t); });
+})();
+</script>
+<script>
+(function(){
+  var btn = document.querySelector('.totop');
+  if(!btn){ return; }
+  var shown = false, ticking = false;
+  function update(){
+    var past = (window.pageYOffset || document.documentElement.scrollTop) > 400;
+    if(past !== shown){ shown = past; btn.classList.toggle('show', past); }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; window.requestAnimationFrame(update); }
+  }, { passive: true });
+  btn.addEventListener('click', function(){
+    var main = document.getElementById('top');
+    if(main){ main.setAttribute('tabindex','-1'); main.focus({ preventScroll: true }); }
+  });
+  update();
+})();
+</script>
+</body>
+</html>
